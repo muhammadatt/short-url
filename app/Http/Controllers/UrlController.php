@@ -17,13 +17,14 @@ class UrlController extends Controller
     public function shorten(Request $request)
     {
 
-        $url = $request->input('url');
-
-        //just return some sample data for now
+        $url = new Url;
+        $url->original = $request->input('url');
+        $url->save();
+   
         return response()->json(
             [
-                "original" => $url,
-                "short" => 'https://bit.ly/abc123'
+                "original" => $url->original,
+                "short" => 'https://bit.ly/' . $url->shortcode
             ],
             200
         );
