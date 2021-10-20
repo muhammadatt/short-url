@@ -24,7 +24,7 @@ class UrlFactory extends Factory
     {
         return [
             'original' => $this->faker->url(),
-            'hash' => Str::random(6),
+            //'shortcode' => Str::random(6),
             'view_count' => $this->faker->randomNumber(),
         ];
     }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Url;
+use Illuminate\Support\Facades\DB;
 
 class UrlController extends Controller
 {
@@ -20,16 +21,21 @@ class UrlController extends Controller
         $url = new Url;
         $url->original = $request->input('url');
         $url->save();
-   
-        return response()->json(
-            [
-                "original" => $url->original,
-                "short" => 'https://bit.ly/' . $url->shortcode
-            ],
-            200
-        );
-    }
 
+        if ($url) {
+
+            return response()->json(
+                [
+                    "original" => $url->original,
+                    "short" => url("{$url->shortcode}")
+                ],
+                201
+            );
+
+        } else {
+            return response()->json(['error' => ["message" => 'Failed to create url.']], 500);
+        }
+    }
 
     /**
      * Receives shortened hash and returns the original url
@@ -37,16 +43,16 @@ class UrlController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function resolve($hash)
+    public function resolve($shortcode)
     {
-        //generate a fake url for now
-        $url = Url::factory()->make();
+
+        $url = Url::where('shortcode', $shortcode)->first();
 
         if ($url) {
 
             //Update view count
-            //$url->view_count = $url->view_count + 1;
-            //$url->save();
+            $url->view_count++;
+            $url->save();
 
             return response()->json(["url" => $url->original], 200);
         } else {
@@ -62,9 +68,18 @@ class UrlController extends Controller
 
     public function topUrls()
     {
-        //generate a fake list of urls for now
-        $urls = Url::factory()->count(10)->make();
 
-        return response()->json($urls, 200);
+        //Return the 100 most frequently viewed URLs
+        $urls = DB::table('urls')->orderBy('view_count', 'DESC')->limit(10)->get();
+
+        if ($urls) {
+
+            return response()->json($urls, 200);
+
+        } else {
+
+            return response()->json(['error' => ["message" => 'Unable to find urls.']], 500);
+        }
+        
     }
 }
