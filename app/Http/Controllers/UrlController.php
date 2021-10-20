@@ -70,7 +70,7 @@ class UrlController extends Controller
     {
 
         //Return the 100 most frequently viewed URLs
-        $urls = DB::table('urls')->orderBy('view_count', 'DESC')->limit(10)->get();
+        $urls = DB::table('urls')->orderBy('view_count', 'DESC')->limit(100)->get();
 
         if ($urls) {
 
