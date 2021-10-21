@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/', [HomeController::class, 'main']);
+Route::get('/top', [HomeController::class, 'top']);
+Route::get('/{shortcode}', [HomeController::class, 'resolve']);
+
