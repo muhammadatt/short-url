@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Url;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
-class UrlController extends Controller
+class ApiController extends Controller
 {
 
     /**
@@ -20,6 +21,16 @@ class UrlController extends Controller
 
         $url = new Url;
         $url->original = $request->input('url');
+
+        $validator = Validator::make($request->all(),
+        [
+            'url' => ['required', 'url'],
+        ]);
+
+        if ($validator->fails()){
+            return response()->json(['error' => ["message" => 'Not a valid url.']], 422);
+        } 
+        
         $url->save();
 
         if ($url) {
@@ -33,12 +44,12 @@ class UrlController extends Controller
             );
 
         } else {
-            return response()->json(['error' => ["message" => 'Failed to create url.']], 500);
+            return response()->json(['error' => ["message" => 'Failed to create short.']], 500);
         }
     }
 
     /**
-     * Receives shortened hash and returns the original url
+     * Receives shortcode and returns the original url
      *
      * @return \Illuminate\Http\Response
      */
@@ -56,7 +67,7 @@ class UrlController extends Controller
 
             return response()->json(["url" => $url->original], 200);
         } else {
-            return response()->json(['error' => ["message" => 'Url not found.']], 404);
+            return response()->json(['error' => ["message" => 'Error: Unable to find the requested URL.']], 404);
         }
     }
 

@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\UrlController;
+use App\Http\Controllers\ApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +20,11 @@ use App\Http\Controllers\UrlController;
 //});
 
 
-Route::get('/top', [UrlController::class, 'topUrls']);
+Route::get('/top', [ApiController::class, 'topUrls']);
 
-Route::post('/shorten', [UrlController::class, 'shorten']);
+Route::post('/shorten', [ApiController::class, 'shorten']);
 
-Route::get('/{hash}', [UrlController::class, 'resolve']);
+Route::get('/{hash}', [ApiController::class, 'resolve']);
 
 
 
