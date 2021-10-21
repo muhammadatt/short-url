@@ -2096,13 +2096,43 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {},
   data: function data() {
     return {
-      post: {
-        url: "",
-        nsfw: false
+      form: {
+        original: "",
+        //original url
+        nsfw: false //nsfw flag
+
       },
       short_url: null,
       error: false
@@ -2110,11 +2140,23 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {},
   methods: {
+    copyLink: function copyLink() {
+      var link = document.getElementById("url");
+      /* Select the input field */
+
+      link.select();
+      link.setSelectionRange(0, 99999);
+      /* For mobile devices */
+
+      /* Copy the text inside the textarea field */
+
+      document.execCommand("copy");
+    },
     submit: function submit() {
       var _this = this;
 
       this.error = false;
-      axios.post("/api/shorten", this.post).then(function (response) {
+      axios.post("/api/shorten", this.form).then(function (response) {
         //this.url = response.data;
         //console.log(response);
         _this.short_url = response.data["short"];
@@ -37951,90 +37993,116 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _vm.short_url
     ? _c("div", [
-        _c(
-          "div",
-          {
-            staticClass:
-              "px-3 mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg h-10 w-full text-lg"
-          },
-          [_vm._v(" " + _vm._s(_vm.short_url))]
-        ),
+        _c("div", { staticClass: "flex flex-row" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "px-3 py-3 bg-white text-gray-400 overflow-hidden shadow rounded-lg w-full text-lg"
+            },
+            [_vm._v("\n            " + _vm._s(_vm.short_url) + " \n        ")]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass:
+                "ml-2 bg-blue-600 text-white text-xl px-3 shadow rounded-lg",
+              on: { click: _vm.copyLink }
+            },
+            [_vm._v("\n        Copiar\n        ")]
+          )
+        ]),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass:
-              "border border-solid border-gray-700 px-3 h-12 rounded-lg"
-          },
-          [_vm._v("Copy")]
-        )
+        _vm._m(0)
       ])
     : _c("div", [
         _vm.error
-          ? _c("div", { staticClass: "text-white bg-red-400 rounded px-2" }, [
-              _vm._v("Unable to shorten. Not a valid url.")
-            ])
+          ? _c(
+              "div",
+              { staticClass: "text-white bg-red-400 rounded px-2 mb-4" },
+              [_vm._v("\n        Unable to shorten. Not a valid url.\n    ")]
+            )
           : _vm._e(),
         _vm._v(" "),
         _c("form", { attrs: { action: "" } }, [
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.post.url,
-                expression: "post.url"
-              }
-            ],
-            staticClass:
-              "px-3 mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg h-12 w-full text-lg",
-            domProps: { value: _vm.post.url },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+          _c("div", { staticClass: "flex flex-row mb-2" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.form.original,
+                  expression: "form.original"
                 }
-                _vm.$set(_vm.post, "url", $event.target.value)
+              ],
+              ref: "form",
+              staticClass:
+                "px-3 py-3 bg-white overflow-hidden shadow rounded-lg w-full text-lg",
+              attrs: { id: "url", placeholder: "Acorta tu enlace" },
+              domProps: { value: _vm.form.original },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "original", $event.target.value)
+                }
               }
-            }
-          }),
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass:
+                  "ml-3 bg-blue-600 text-white text-xl px-3 shadow rounded-lg",
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.submit.apply(null, arguments)
+                  }
+                }
+              },
+              [_vm._v("\n                Acortar\n            ")]
+            )
+          ]),
           _vm._v(" "),
           _c("input", {
             directives: [
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.post.nsfw,
-                expression: "post.nsfw"
+                value: _vm.form.nsfw,
+                expression: "form.nsfw"
               }
             ],
-            staticClass: "mt-3",
-            attrs: { type: "checkbox", name: "nsfw" },
+            staticClass: "cursor-pointer",
+            attrs: { type: "checkbox", id: "nsfw", name: "nsfw" },
             domProps: {
-              checked: Array.isArray(_vm.post.nsfw)
-                ? _vm._i(_vm.post.nsfw, null) > -1
-                : _vm.post.nsfw
+              checked: Array.isArray(_vm.form.nsfw)
+                ? _vm._i(_vm.form.nsfw, null) > -1
+                : _vm.form.nsfw
             },
             on: {
               change: function($event) {
-                var $$a = _vm.post.nsfw,
+                var $$a = _vm.form.nsfw,
                   $$el = $event.target,
                   $$c = $$el.checked ? true : false
                 if (Array.isArray($$a)) {
                   var $$v = null,
                     $$i = _vm._i($$a, $$v)
                   if ($$el.checked) {
-                    $$i < 0 && _vm.$set(_vm.post, "nsfw", $$a.concat([$$v]))
+                    $$i < 0 && _vm.$set(_vm.form, "nsfw", $$a.concat([$$v]))
                   } else {
                     $$i > -1 &&
                       _vm.$set(
-                        _vm.post,
+                        _vm.form,
                         "nsfw",
                         $$a.slice(0, $$i).concat($$a.slice($$i + 1))
                       )
                   }
                 } else {
-                  _vm.$set(_vm.post, "nsfw", $$c)
+                  _vm.$set(_vm.form, "nsfw", $$c)
                 }
               }
             }
@@ -38042,13 +38110,32 @@ var render = function() {
           _vm._v(" "),
           _c(
             "label",
-            { staticClass: "text-xs text-gray-500", attrs: { for: "nsfw" } },
+            {
+              staticClass: "text-xs text-gray-500 cursor-pointer",
+              attrs: { for: "nsfw" }
+            },
             [_vm._v("Not safe for work?")]
           )
         ])
       ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", [
+      _c(
+        "a",
+        {
+          staticClass: "text-xs mt-2 text-xs text-blue-400",
+          attrs: { href: "/" }
+        },
+        [_vm._v(" Submit a new link")]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 

@@ -1,45 +1,71 @@
 <template>
-   
-   <div v-if="short_url">
-    <div class="px-3 mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg h-10 w-full text-lg"> {{ short_url }}</div>
-   
-    <button class="border border-solid border-gray-700 px-3 h-12 rounded-lg">Copy</button>
-   </div>
+    <div v-if="short_url">
+        <div class="flex flex-row">
+            <div
+                class="px-3 py-3 bg-white text-gray-400 overflow-hidden shadow rounded-lg w-full text-lg"
+            >
+                {{ short_url }} 
+            </div>
+
+            <button
+                class="ml-2 bg-blue-600 text-white text-xl px-3 shadow rounded-lg"
+                @click="copyLink"
+            >
+            Copiar
+            </button>
+            
+        </div>
+        <div>
+                <a class="text-xs mt-2 text-xs text-blue-400" href="/"> Submit a new link</a>
+            </div>
+    </div>
 
     <div v-else>
-
-        <div v-if="error" class="text-white bg-red-400 rounded px-2">Unable to shorten. Not a valid url.</div>
+        <div v-if="error" class="text-white bg-red-400 rounded px-2 mb-4">
+            Unable to shorten. Not a valid url.
+        </div>
         <form action="">
+            <div class="flex flex-row mb-2">
+                <input
+                    class="px-3 py-3 bg-white overflow-hidden shadow rounded-lg w-full text-lg"
+                    id="url"
+                    ref="form"
+                    v-model="form.original"
+                    placeholder="Acorta tu enlace"
+                />
+
+                <button
+                    class="ml-3 bg-blue-600 text-white text-xl px-3 shadow rounded-lg"
+                    @click.prevent="submit"
+                >
+                    Acortar
+                </button>
+            </div>
 
             <input
-                class="px-3 mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg h-12 w-full text-lg"
-                v-model="post.url"
-
+                type="checkbox"
+                id="nsfw"
+                name="nsfw"
+                class="cursor-pointer"
+                v-model="form.nsfw"
             />
 
-            <input type="checkbox" name="nsfw" class="mt-3" v-model="post.nsfw" />
-
-            <label for="nsfw" class="text-xs text-gray-500"
+            <label for="nsfw" class="text-xs text-gray-500 cursor-pointer"
                 >Not safe for work?</label
             >
-
         </form>
-
-        
     </div>
 </template>
 
 <script>
 export default {
-    props: {
-
-    },
+    props: {},
 
     data() {
         return {
-            post: {
-                url: "",
-                nsfw: false
+            form: {
+                original: "", //original url
+                nsfw: false //nsfw flag
             },
             short_url: null,
             error: false
@@ -49,12 +75,22 @@ export default {
     computed: {},
 
     methods: {
-        submit() {
 
+    copyLink() {
+      let link = document.getElementById("url"); 
+      /* Select the input field */
+      link.select();
+      link.setSelectionRange(0, 99999); /* For mobile devices */
+
+      /* Copy the text inside the textarea field */
+      document.execCommand("copy");
+
+    },
+        submit() {
             this.error = false;
 
             axios
-                .post("/api/shorten", this.post)
+                .post("/api/shorten", this.form)
                 .then(response => {
                     //this.url = response.data;
 

@@ -20,21 +20,21 @@ class ApiController extends Controller
     {
 
         $url = new Url;
-        $url->original = $request->input('url');
+        $url->fill($request->all());
 
+        //Validate that the user has entered a valid url
         $validator = Validator::make($request->all(),
         [
-            'url' => ['required', 'url'],
+            'original' => ['required', 'url'],
         ]);
 
         if ($validator->fails()){
             return response()->json(['error' => ["message" => 'Not a valid url.']], 422);
         } 
-        
-        $url->save();
 
-        if ($url) {
+        if ($url->save()) {
 
+            //Return JSON containing both the shortcode and the original url
             return response()->json(
                 [
                     "original" => $url->original,
@@ -49,7 +49,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Receives shortcode and returns the original url
+     * Receives a shortcode and returns the original url
      *
      * @return \Illuminate\Http\Response
      */

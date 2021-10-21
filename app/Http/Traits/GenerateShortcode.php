@@ -20,13 +20,13 @@ trait GenerateShortcode {
     | 
     | One approach that fits this requirements is to take the auto-increment id for 
     | each new databse entry and convert it into either base36 (numerals and lowercase letters) 
-    | or base 62 (numerals, upper lowercase letters).
+    | or base 62 (numerals, upper lowercase letters). See additional comments below.
     |  
     */
 
     /**
      * Converts integer to base36 (uses numerals and lowercase letters only)
-     * PROS: Uses built-in PHP function (reliable)
+     * PROS: Uses built-in PHP function (so it's reliable)
      * CONS: Only works up to base36, so wont generate urls quite as short as base62
      */
     public static function convert_int_to_base36($int)
@@ -37,9 +37,9 @@ trait GenerateShortcode {
 
     /**
      * Converts integer to base62 (numerals, uppercase and lowercase letters)
+     * Borrowed, with slight modification from https://stackoverflow.com/questions/4964197/converting-a-number-base-10-to-base-62-a-za-z0-9
      * PROS: Adding uppercase letters to the character set generates the shortest urls possible
      * CONS: May require more testing around edge cases for larger numbers?
-     * Borrowed, with slight modification from https://stackoverflow.com/questions/4964197/converting-a-number-base-10-to-base-62-a-za-z0-9
      * Tested basic working functionality over an arbitray range of integers here: http://codepad.org/ZVCK3ltF
      */
 
