@@ -23,14 +23,16 @@ class ApiController extends Controller
         $url->fill($request->all());
 
         //Validate that the user has entered a valid url
-        $validator = Validator::make($request->all(),
-        [
-            'original' => ['required', 'url'],
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'original' => ['required', 'url'],
+            ]
+        );
 
-        if ($validator->fails()){
+        if ($validator->fails()) {
             return response()->json(['error' => ["message" => 'Not a valid url.']], 422);
-        } 
+        }
 
         if ($url->save()) {
 
@@ -42,7 +44,6 @@ class ApiController extends Controller
                 ],
                 201
             );
-
         } else {
             return response()->json(['error' => ["message" => 'Failed to create short.']], 500);
         }
@@ -57,7 +58,10 @@ class ApiController extends Controller
     public function resolve($shortcode)
     {
 
-        $url = Url::where('shortcode', $shortcode)->first();
+        //$url = Url::where('shortcode', $shortcode)->first();
+        //Adding BINARY to our WHERE clause ensures that shortcode lookups are always case-sensitive
+
+        $url = Url::where(DB::raw('BINARY `shortcode`'), $shortcode)->first();
 
         if ($url) {
 
@@ -86,11 +90,9 @@ class ApiController extends Controller
         if ($urls) {
 
             return response()->json($urls, 200);
-
         } else {
 
             return response()->json(['error' => ["message" => 'Unable to find urls.']], 500);
         }
-        
     }
 }
