@@ -29,7 +29,7 @@
 
         <div >
 
-            <div class="text-2xl font-bold m-5 text-color-gray-600">Top 100 Most Visited Urls</div>
+            
 
             <top-urls></top-urls>
 

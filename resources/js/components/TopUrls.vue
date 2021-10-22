@@ -1,32 +1,28 @@
 <template>
-    <div class="container">
-
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        
-                        <div v-for="url in urlList" :key="url.id" class="mb-2">
-                            
-                            <div class="flex flex-row justify-between">
-                            <div class="text-base"> <a :href="baseUrl + '/' + url.shortcode"> {{ baseUrl + '/' + url.shortcode }}</a> </div>
-                            <div class="text-xs text-gray-400"> views: {{ url.view_count.toLocaleString() }} </div>
-                            </div>
-
-                            <div class="text-sm text-gray-400"> {{ url.original }} </div>
-                        </div>
-
-                    </div>
+<div class="flex flex-row justify-center">
+    <div class="max-w-3xl">
+        <div class="text-2xl text-center font-bold my-5 text-color-gray-600">Top 100 Most Visited Urls</div>
+        <div v-for="(url, index) in urlList" class="mb-2">
+            <div class="flex flex-row justify-between">
+                <div class="text-base">
+                  {{ index + 1 + ". " }}  <a :href="baseUrl + '/' + url.shortcode">
+                        {{ baseUrl + "/" + url.shortcode }}</a
+                    >
+                </div>
+                <div class="text-xs text-gray-400">
+                    views: {{ url.view_count.toLocaleString() }}
                 </div>
             </div>
-    
+
+            <div class="text-sm text-gray-400">{{ url.original }}</div>
+        </div>
+    </div>
     </div>
 </template>
 
 <script>
 export default {
-    props: {
-
-    },
+    props: {},
 
     data() {
         return {
@@ -36,11 +32,9 @@ export default {
     },
 
     computed: {
-
-        baseUrl(){
-            return location.protocol + '//' + location.host;
+        baseUrl() {
+            return location.protocol + "//" + location.host;
         }
-
     },
 
     mounted() {

@@ -2311,8 +2311,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {},
   data: function data() {
@@ -2323,7 +2321,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     baseUrl: function baseUrl() {
-      return location.protocol + '//' + location.host;
+      return location.protocol + "//" + location.host;
     }
   },
   mounted: function mounted() {
@@ -38468,39 +38466,56 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "container" }, [
-    _c("div", { staticClass: "col-md-8" }, [
-      _c("div", { staticClass: "card" }, [
+  return _c("div", { staticClass: "flex flex-row justify-center" }, [
+    _c(
+      "div",
+      { staticClass: "max-w-3xl" },
+      [
         _c(
           "div",
-          { staticClass: "card-body" },
-          _vm._l(_vm.urlList, function(url) {
-            return _c("div", { key: url.id, staticClass: "mb-2" }, [
-              _c("div", { staticClass: "flex flex-row justify-between" }, [
-                _c("div", { staticClass: "text-base" }, [
-                  _c(
-                    "a",
-                    { attrs: { href: _vm.baseUrl + "/" + url.shortcode } },
-                    [_vm._v(" " + _vm._s(_vm.baseUrl + "/" + url.shortcode))]
-                  )
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "text-xs text-gray-400" }, [
-                  _vm._v(
-                    " views: " + _vm._s(url.view_count.toLocaleString()) + " "
-                  )
-                ])
+          {
+            staticClass:
+              "text-2xl text-center font-bold my-5 text-color-gray-600"
+          },
+          [_vm._v("Top 100 Most Visited Urls")]
+        ),
+        _vm._v(" "),
+        _vm._l(_vm.urlList, function(url, index) {
+          return _c("div", { staticClass: "mb-2" }, [
+            _c("div", { staticClass: "flex flex-row justify-between" }, [
+              _c("div", { staticClass: "text-base" }, [
+                _vm._v(
+                  "\r\n                  " + _vm._s(index + 1 + ". ") + "  "
+                ),
+                _c(
+                  "a",
+                  { attrs: { href: _vm.baseUrl + "/" + url.shortcode } },
+                  [
+                    _vm._v(
+                      "\r\n                        " +
+                        _vm._s(_vm.baseUrl + "/" + url.shortcode)
+                    )
+                  ]
+                )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "text-sm text-gray-400" }, [
-                _vm._v(" " + _vm._s(url.original) + " ")
+              _c("div", { staticClass: "text-xs text-gray-400" }, [
+                _vm._v(
+                  "\r\n                    views: " +
+                    _vm._s(url.view_count.toLocaleString()) +
+                    "\r\n                "
+                )
               ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "text-sm text-gray-400" }, [
+              _vm._v(_vm._s(url.original))
             ])
-          }),
-          0
-        )
-      ])
-    ])
+          ])
+        })
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = []
