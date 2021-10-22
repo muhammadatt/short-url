@@ -1,6 +1,7 @@
 <template>
     <div v-if="short_url">
         <div class="flex flex-row">
+           
             <div
                 class="px-3 py-3 bg-white text-gray-400 overflow-hidden shadow rounded-lg w-full text-lg"
             >
@@ -79,7 +80,14 @@ export default {
         };
     },
 
-    computed: {},
+    computed: {
+        //Generates a base url from the current page/host
+        //Consider replacing this with a reference to an environment value, e.g. process.env.APP_URL
+
+        baseUrl() {
+            return location.protocol + "//" + location.host;
+        }
+    },
 
     methods: {
         //copies the short url link to clipboard
@@ -107,13 +115,18 @@ export default {
             axios
                 .post("/api/shorten", this.form)
                 .then(response => {
-                    //this.url = response.data;
-
                     //console.log(response);
-                    this.short_url = response.data.short;
+                    this.short_url =
+                        this.baseUrl + "/" + response.data.shortcode;
                 })
                 .catch(err => {
-                    console.log(JSON.stringify(err.response));
+                    //console.log(JSON.stringify(err.response));
+
+                    /** I'm currently validating urls on the backend and returning an error message 
+                     * if validation fails. Ideally, we would also validate that the url is valid on the
+                     * frontend before sending it to the server. 
+                     * */
+
                     this.status = err.response.data.message;
                     this.error = true;
                 });

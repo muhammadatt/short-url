@@ -2,8 +2,15 @@
     <div>
         <modal v-if="modalOpen" @redirect="redirect"></modal>
         <div class="row justify-content-center">
-            <div class="text-lg">
-                {{ status }}
+            <div v-if="loading" class="text-lg">
+                Loading please wait...
+            </div>
+            <div v-if="error">
+
+               <div class="text-lg">Unable to find the requested URL. Sorry, we looked everywhere.</div>
+
+               <img class="mt-20" src="https://s3.us-west-2.amazonaws.com/images.onemonthspanish.com/Reading-list-bro-1.svg" />
+
             </div>
         </div>
     </div>
@@ -21,7 +28,6 @@ export default {
     data() {
         return {
             url: null,
-            status: "Loading please wait...",
             loading: true,
             modalOpen: false
         };
@@ -45,8 +51,9 @@ export default {
             })
             .catch(err => {
                 console.log(JSON.stringify(err.response));
-                this.status = err.response.data.error.message;
+                //this.error_msg = err.response.data.error.message;
                 this.loading = false;
+                this.error = true;
             });
     },
 

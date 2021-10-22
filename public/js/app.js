@@ -2220,6 +2220,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {},
   data: function data() {
@@ -2237,7 +2238,13 @@ __webpack_require__.r(__webpack_exports__);
 
     };
   },
-  computed: {},
+  computed: {
+    //Generates a base url from the current page/host
+    //Consider replacing this with a reference to an environment value, e.g. process.env.APP_URL
+    baseUrl: function baseUrl() {
+      return location.protocol + "//" + location.host;
+    }
+  },
   methods: {
     //copies the short url link to clipboard
     copyLink: function copyLink() {
@@ -2263,11 +2270,15 @@ __webpack_require__.r(__webpack_exports__);
 
       this.error = false;
       axios.post("/api/shorten", this.form).then(function (response) {
-        //this.url = response.data;
         //console.log(response);
-        _this.short_url = response.data["short"];
+        _this.short_url = _this.baseUrl + "/" + response.data.shortcode;
       })["catch"](function (err) {
-        console.log(JSON.stringify(err.response));
+        //console.log(JSON.stringify(err.response));
+
+        /** I'm currently validating urls on the backend and returning an error message 
+         * if validation fails. Ideally, we would also validate that the url is valid on the
+         * frontend before sending it to the server. 
+         * */
         _this.status = err.response.data.message;
         _this.error = true;
       });
@@ -2316,6 +2327,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {},
   data: function data() {
@@ -2324,6 +2337,8 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   computed: {
+    //Generates a base url from the current page/host
+    //Consider replacing this with a reference to an environment value, e.g. process.env.APP_URL
     baseUrl: function baseUrl() {
       return location.protocol + "//" + location.host;
     }
@@ -2363,6 +2378,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {
     shortcode: {
@@ -2373,7 +2395,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       url: null,
-      status: "Loading please wait...",
       loading: true,
       modalOpen: false
     };
@@ -2392,9 +2413,10 @@ __webpack_require__.r(__webpack_exports__);
       } //console.log(response);
 
     })["catch"](function (err) {
-      console.log(JSON.stringify(err.response));
-      _this.status = err.response.data.error.message;
+      console.log(JSON.stringify(err.response)); //this.error_msg = err.response.data.error.message;
+
       _this.loading = false;
+      _this.error = true;
     });
   },
   methods: {
@@ -38485,21 +38507,12 @@ var render = function() {
         _vm._l(_vm.urlList, function(url, index) {
           return _c("div", { staticClass: "mb-2" }, [
             _c("div", { staticClass: "flex flex-row justify-between" }, [
-              _c("div", { staticClass: "text-base" }, [
+              _c("div", { staticClass: "text-gray-600 text-base font-bold" }, [
                 _vm._v(
                   "\n                    " +
                     _vm._s(index + 1 + ". ") +
-                    "\n                    "
-                ),
-                _c(
-                  "a",
-                  { attrs: { href: _vm.baseUrl + "/" + url.shortcode } },
-                  [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(_vm.baseUrl + "/" + url.shortcode)
-                    )
-                  ]
+                    _vm._s(url.title) +
+                    "\n                "
                 )
               ]),
               _vm._v(" "),
@@ -38508,6 +38521,15 @@ var render = function() {
                   "\n                    views: " +
                     _vm._s(url.view_count.toLocaleString()) +
                     "\n                "
+                )
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "text-base" }, [
+              _c("a", { attrs: { href: _vm.baseUrl + "/" + url.shortcode } }, [
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(_vm.baseUrl + "/" + url.shortcode)
                 )
               ])
             ]),
@@ -38553,9 +38575,29 @@ var render = function() {
         : _vm._e(),
       _vm._v(" "),
       _c("div", { staticClass: "row justify-content-center" }, [
-        _c("div", { staticClass: "text-lg" }, [
-          _vm._v("\n            " + _vm._s(_vm.status) + "\n        ")
-        ])
+        _vm.loading
+          ? _c("div", { staticClass: "text-lg" }, [
+              _vm._v("\n            Loading please wait...\n        ")
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.error
+          ? _c("div", [
+              _c("div", { staticClass: "text-lg" }, [
+                _vm._v(
+                  "Unable to find the requested URL. Sorry, we looked everywhere."
+                )
+              ]),
+              _vm._v(" "),
+              _c("img", {
+                staticClass: "mt-20",
+                attrs: {
+                  src:
+                    "https://s3.us-west-2.amazonaws.com/images.onemonthspanish.com/Reading-list-bro-1.svg"
+                }
+              })
+            ])
+          : _vm._e()
       ])
     ],
     1
