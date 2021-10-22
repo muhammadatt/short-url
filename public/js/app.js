@@ -38216,7 +38216,7 @@ var render = function() {
           {
             staticClass:
               "inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle",
-            staticStyle: { width: "800px" },
+            staticStyle: { width: "500px" },
             attrs: {
               role: "dialog",
               "aria-modal": "true",

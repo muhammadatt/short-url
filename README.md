@@ -29,6 +29,8 @@ DB_PASSWORD=mydbpassword
 GET /api/{shortcode}
 Looks up a provided shortcode and returns a url object that contains the orignal url
 
+https://chiquito-url.herokuapp.com/api/3f
+
 ```json
 {
     "id": 659,
@@ -43,6 +45,8 @@ Looks up a provided shortcode and returns a url object that contains the orignal
 
 POST /api/shorten
 Accepts an object that contains the original long url and returns a url object that contains the shortcode
+
+https://chiquito-url.herokuapp.com/api/shorten
 
 Accepts:
 
@@ -67,6 +71,9 @@ Returns:
 
 GET /api/top
 Returns a list that contains the 100 most frequently viewed urls
+
+https://chiquito-url.herokuapp.com/api/top
+
 ```json
 [
     {
@@ -91,25 +98,36 @@ Returns a list that contains the 100 most frequently viewed urls
 ```
 ## Web Endpoints
 
-Homepage/Shorten Urls:
+#### Homepage/Shorten Urls:
+
 https://chiquito-url.herokuapp.com/
 
-Show Top 100 Most Visited Urls:
+#### Show Top 100 Most Visited Urls:
+
 https://chiquito-url.herokuapp.com/top
 
-Resolve a shortened Url:
-Safe: https://chiquito-url.herokuapp.com/3f
-NSFW: https://chiquito-url.herokuapp.com/3g
-Not Found Error: http://chiquito-url.herokuapp.com/4jaKz
+#### Resolve a shortened Url:
+
+* Safe: https://chiquito-url.herokuapp.com/3f
+
+* NSFW: https://chiquito-url.herokuapp.com/3i
+
+* Not Found Error: http://chiquito-url.herokuapp.com/4jaKz
+
 
 ## Notes
 
-Shortener Algorithm
+#### Shortener Algorithm
 
-Turns out there are a lot of different ways to potentially code a url shortener. The basic gist of the approach that I used was to take auto-incremented primary key for each new entry and convert it to a string value (by converting it to Base62). I added a lengthy comment to the GeneratesShortcode Trait that discusses the considerations that I took into account when choosing my approach. 
+It turns out that there are a lot of different ways to potentially handling the actual shortener. I spent a good bit of time considering different approaches. 
 
-Potential Upgrades/Changes
+I eliminated the idea of trying to hash the actual url itself and settled on the idea of hashing the value of the integer primary key for each new database entry.
 
+What I ended up finally doing was to take auto-incremented primary key converting it to a string value by converting it to Base62. I added a lengthy comment to the GeneratesShortcode Trait that discusses the considerations that I took into account and PROs/CONs of this approach. 
 
+#### Potential Upgrades/Changes
 
-
+* I'm currently validating user-submitted urls on the backend and returning an error message. Ideally we should also validate submitted urls on the front end before submitting to the server.
+* If I were to continue development on this, I would probably use Vue Router to handle generating urls and handling redirects.
+* Lots of potential frontend UI/design changes; mobile view is currently rather clunky.
+* I'm currently using a simple approach to extract page titles from URLs. There are some potentially more robust scraping solutions here, but would require a decent amount of testing across a bunch of real world sites. 
