@@ -2311,12 +2311,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {},
   data: function data() {
     return {
-      urlList: null,
-      loading: true
+      urlList: null
     };
   },
   computed: {
@@ -2327,12 +2331,10 @@ __webpack_require__.r(__webpack_exports__);
   mounted: function mounted() {
     var _this = this;
 
+    //request the list of top 100 urls from our REST API endpoint when the component is mounted
     axios.get("/api/top").then(function (response) {
       _this.urlList = response.data;
-    })["catch"](function (err) {
-      console.log(JSON.stringify(err.response));
-      _this.status = err.response.data.message;
-      _this.loading = false;
+    })["catch"](function (err) {//console.log(JSON.stringify(err.response));
     });
   }
 });
@@ -38477,7 +38479,7 @@ var render = function() {
             staticClass:
               "text-2xl text-center font-bold my-5 text-color-gray-600"
           },
-          [_vm._v("Top 100 Most Visited Urls")]
+          [_vm._v("\n            Top 100 Most Visited Urls\n        ")]
         ),
         _vm._v(" "),
         _vm._l(_vm.urlList, function(url, index) {
@@ -38485,14 +38487,16 @@ var render = function() {
             _c("div", { staticClass: "flex flex-row justify-between" }, [
               _c("div", { staticClass: "text-base" }, [
                 _vm._v(
-                  "\r\n                  " + _vm._s(index + 1 + ". ") + "  "
+                  "\n                    " +
+                    _vm._s(index + 1 + ". ") +
+                    "\n                    "
                 ),
                 _c(
                   "a",
                   { attrs: { href: _vm.baseUrl + "/" + url.shortcode } },
                   [
                     _vm._v(
-                      "\r\n                        " +
+                      "\n                        " +
                         _vm._s(_vm.baseUrl + "/" + url.shortcode)
                     )
                   ]
@@ -38501,9 +38505,9 @@ var render = function() {
               _vm._v(" "),
               _c("div", { staticClass: "text-xs text-gray-400" }, [
                 _vm._v(
-                  "\r\n                    views: " +
+                  "\n                    views: " +
                     _vm._s(url.view_count.toLocaleString()) +
-                    "\r\n                "
+                    "\n                "
                 )
               ])
             ]),
