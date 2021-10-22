@@ -38,10 +38,12 @@ trait GenerateShortcode {
     /**
      * Converts integer to base62 (numerals, uppercase and lowercase letters)
      * Borrowed, with slight modification from https://stackoverflow.com/questions/4964197/converting-a-number-base-10-to-base-62-a-za-z0-9
+     * I confirmed the basic working functionality over an arbitray range of integers here: http://codepad.org/ZVCK3ltF
+     * 
      * PROS: Adding uppercase letters to the character set generates the shortest urls possible
-     * CONS: May require more testing around edge cases for larger numbers?
-     * Tested basic working functionality over an arbitray range of integers here: http://codepad.org/ZVCK3ltF
-     */
+     * CONS: Reliability? The code is understandable, and appears to work, but I am sure why PHP's in-built function stops at base36, 
+     * which gives me some hesitation. May require more testing around edge cases for larger numbers.
+     * */
 
     public static function convert_int_to_base62($int)
     {
@@ -64,5 +66,20 @@ trait GenerateShortcode {
             $shortcode = $chars[$r] . $shortcode;
         }
         return $shortcode;
+    }
+
+    //Convert from base62 back to an integer
+    public static function convert_base62_to_integer($code, $b=62)
+    {
+
+            $chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            $limit = strlen($code);
+            $num=strpos($chars,$code[0]);
+            for($i=1;$i<$limit;$i++) {
+              $num = $b * $num + strpos($chars,$code[$i]);
+            }
+
+            $int = (int) $num;
+            return $int;
     }
 }

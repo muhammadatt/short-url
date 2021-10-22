@@ -56,15 +56,13 @@ class ApiController extends Controller
     public function resolve($shortcode)
     {
 
-        //Using BINARY in our WHERE clause ensures that shortcode lookups are always case-sensitive
-
-        $url = Url::where(DB::raw('BINARY `shortcode`'), $shortcode)->first();
-
         /**
-         * NOTE: Another (probably better) way to handle this would be convert the shortcode from Base62 back to
-         * the original primary key integer value and then simply using the primary key to look up the database
-         * entry.
+         * Convert the shortcode from Base62 back to its integer value 
+         * and use that to look up the correct database entry.
          */
+
+        $primary_key = Url::convert_int_to_base62($shortcode);
+        $url = Url::find($primary_key);
 
         if ($url) {
 

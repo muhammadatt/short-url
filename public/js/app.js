@@ -2396,6 +2396,7 @@ __webpack_require__.r(__webpack_exports__);
     return {
       url: null,
       loading: true,
+      error: false,
       modalOpen: false
     };
   },

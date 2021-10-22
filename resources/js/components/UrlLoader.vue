@@ -29,6 +29,7 @@ export default {
         return {
             url: null,
             loading: true,
+            error: false,
             modalOpen: false
         };
     },
