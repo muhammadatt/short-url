@@ -19,7 +19,7 @@
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-headline"
-          style="width:800px"
+          style="width:500px"
         >
 
             <slot name="body">
