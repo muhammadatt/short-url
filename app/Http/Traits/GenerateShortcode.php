@@ -75,6 +75,7 @@ trait GenerateShortcode {
             $chars='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             $limit = strlen($code);
             $num=strpos($chars,$code[0]);
+            
             for($i=1;$i<$limit;$i++) {
               $num = $b * $num + strpos($chars,$code[$i]);
             }

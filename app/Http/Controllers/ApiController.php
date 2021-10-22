@@ -61,7 +61,7 @@ class ApiController extends Controller
          * and use that to look up the correct database entry.
          */
 
-        $primary_key = Url::convert_int_to_base62($shortcode);
+        $primary_key = Url::convert_base62_to_integer($shortcode);
         $url = Url::find($primary_key);
 
         if ($url) {
