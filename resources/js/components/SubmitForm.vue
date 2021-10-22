@@ -4,20 +4,27 @@
             <div
                 class="px-3 py-3 bg-white text-gray-400 overflow-hidden shadow rounded-lg w-full text-lg"
             >
-                {{ short_url }} 
+                {{ short_url }}
             </div>
+            <input
+                ref="short_url"
+                id="short_url"
+                type="hidden"
+                :value="short_url"
+            />
 
             <button
                 class="ml-2 bg-blue-600 text-white text-xl px-3 shadow rounded-lg"
                 @click="copyLink"
             >
-            Copiar
+                Copiar
             </button>
-            
         </div>
         <div>
-                <a class="text-xs mt-2 text-xs text-blue-400" href="/"> Submit a new link</a>
-            </div>
+            <a class="text-xs mt-2 text-xs text-blue-400" href="/">
+                Submit a new link</a
+            >
+        </div>
     </div>
 
     <div v-else>
@@ -29,7 +36,6 @@
                 <input
                     class="px-3 py-3 bg-white overflow-hidden shadow rounded-lg w-full text-lg"
                     id="url"
-                    ref="form"
                     v-model="form.original"
                     placeholder="Acorta tu enlace"
                 />
@@ -63,29 +69,38 @@ export default {
 
     data() {
         return {
+            //form object
             form: {
                 original: "", //original url
                 nsfw: false //nsfw flag
             },
-            short_url: null,
-            error: false
+            short_url: null, //will contain the shortened url returned from the server
+            error: false //form submit error status
         };
     },
 
     computed: {},
 
     methods: {
+        //copies the short url link to clipboard
+        copyLink() {
+            let input = this.$refs.short_url;
+            input.setAttribute("type", "text");
+            input.select();
 
-    copyLink() {
-      let link = document.getElementById("url"); 
-      /* Select the input field */
-      link.select();
-      link.setSelectionRange(0, 99999); /* For mobile devices */
+            try {
+                var successful = document.execCommand("copy");
+                if (successful) alert("Link was copied!");
+            } catch (err) {
+                alert("Oops, unable to copy link");
+            }
 
-      /* Copy the text inside the textarea field */
-      document.execCommand("copy");
+            /* unselect the range */
+            input.setAttribute("type", "hidden");
+            window.getSelection().removeAllRanges();
+        },
 
-    },
+        //submits the original url to the server and returns the short url link
         submit() {
             this.error = false;
 

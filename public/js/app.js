@@ -2214,10 +2214,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: {},
   data: function data() {
     return {
+      //form object
       form: {
         original: "",
         //original url
@@ -2225,23 +2232,32 @@ __webpack_require__.r(__webpack_exports__);
 
       },
       short_url: null,
-      error: false
+      //will contain the shortened url returned from the server
+      error: false //form submit error status
+
     };
   },
   computed: {},
   methods: {
+    //copies the short url link to clipboard
     copyLink: function copyLink() {
-      var link = document.getElementById("url");
-      /* Select the input field */
+      var input = this.$refs.short_url;
+      input.setAttribute("type", "text");
+      input.select();
 
-      link.select();
-      link.setSelectionRange(0, 99999);
-      /* For mobile devices */
+      try {
+        var successful = document.execCommand("copy");
+        if (successful) alert("Link was copied!");
+      } catch (err) {
+        alert("Oops, unable to copy link");
+      }
+      /* unselect the range */
 
-      /* Copy the text inside the textarea field */
 
-      document.execCommand("copy");
+      input.setAttribute("type", "hidden");
+      window.getSelection().removeAllRanges();
     },
+    //submits the original url to the server and returns the short url link
     submit: function submit() {
       var _this = this;
 
@@ -38289,8 +38305,14 @@ var render = function() {
               staticClass:
                 "px-3 py-3 bg-white text-gray-400 overflow-hidden shadow rounded-lg w-full text-lg"
             },
-            [_vm._v("\n            " + _vm._s(_vm.short_url) + " \n        ")]
+            [_vm._v("\n            " + _vm._s(_vm.short_url) + "\n        ")]
           ),
+          _vm._v(" "),
+          _c("input", {
+            ref: "short_url",
+            attrs: { id: "short_url", type: "hidden" },
+            domProps: { value: _vm.short_url }
+          }),
           _vm._v(" "),
           _c(
             "button",
@@ -38299,7 +38321,7 @@ var render = function() {
                 "ml-2 bg-blue-600 text-white text-xl px-3 shadow rounded-lg",
               on: { click: _vm.copyLink }
             },
-            [_vm._v("\n        Copiar\n        ")]
+            [_vm._v("\n            Copiar\n        ")]
           )
         ]),
         _vm._v(" "),
@@ -38325,7 +38347,6 @@ var render = function() {
                   expression: "form.original"
                 }
               ],
-              ref: "form",
               staticClass:
                 "px-3 py-3 bg-white overflow-hidden shadow rounded-lg w-full text-lg",
               attrs: { id: "url", placeholder: "Acorta tu enlace" },
@@ -38420,7 +38441,7 @@ var staticRenderFns = [
           staticClass: "text-xs mt-2 text-xs text-blue-400",
           attrs: { href: "/" }
         },
-        [_vm._v(" Submit a new link")]
+        [_vm._v("\n            Submit a new link")]
       )
     ])
   }
