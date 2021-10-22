@@ -19,6 +19,6 @@ DB_PASSWORD=mydbpassword
 
 3. Run ```"php artisan migrate"``` to run database migrations and create tables
 4. Run ```"db artisan db:seed"``` to seed the database (required to demonstrate the top 100 visited urls). 
-4. Run ```"php artisan serve --port=8080"``` to serve the app
+4. Run ```"php artisan serve --port=8080"``` to serve the api
 
 
