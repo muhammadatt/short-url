@@ -12,7 +12,7 @@ class ApiController extends Controller
 
     /**
      * Returns a shortened url for a given long url string
-     *
+     * @param Object $request 
      * @return \Illuminate\Http\Response
      */
 
@@ -22,7 +22,7 @@ class ApiController extends Controller
         $url = new Url;
         $url->fill($request->all());
 
-        //Validate that the user has entered a valid url
+        //Validate that provided url is a valid url format
         $validator = Validator::make(
             $request->all(),
             [
@@ -34,34 +34,37 @@ class ApiController extends Controller
             return response()->json(['error' => ["message" => 'Not a valid url.']], 422);
         }
 
+        //extract the page title from the url
+        $url->title = $this->getTitle($url->original);
+
         if ($url->save()) {
 
             //Return JSON containing both the shortcode and the original url
-            return response()->json(
-                [
-                    "original" => $url->original,
-                    "short" => url("{$url->shortcode}")
-                ],
-                201
-            );
+            return response()->json($url, 201);
+
         } else {
-            return response()->json(['error' => ["message" => 'Failed to create short.']], 500);
+            return response()->json(['error' => ["message" => 'Failed to create short url.']], 500);
         }
     }
 
     /**
-     * Receives a shortcode and returns the original url
-     *
+     * Receives a shortcode and returns url object that contains the original url
+     * @param String $shortcode 
      * @return \Illuminate\Http\Response
      */
 
     public function resolve($shortcode)
     {
 
-        //$url = Url::where('shortcode', $shortcode)->first();
-        //Adding BINARY to our WHERE clause ensures that shortcode lookups are always case-sensitive
+        //Using BINARY in our WHERE clause ensures that shortcode lookups are always case-sensitive
 
         $url = Url::where(DB::raw('BINARY `shortcode`'), $shortcode)->first();
+
+        /**
+         * NOTE: Another (probably better) way to handle this would be convert the shortcode from Base62 back to
+         * the original primary key integer value and then simply using the primary key to look up the database
+         * entry.
+         */
 
         if ($url) {
 
@@ -94,5 +97,16 @@ class ApiController extends Controller
 
             return response()->json(['error' => ["message" => 'Unable to find urls.']], 500);
         }
+    }
+
+    public function getTitle($url) {
+        $title = '';
+        $data = file_get_contents($url);
+
+        //extract title tag
+        if ($data) {
+            $title = preg_match('/<title[^>]*>(.*?)<\/title>/ims', $data, $matches) ? $matches[1] : null;
+        }
+        return $title; 
     }
 }

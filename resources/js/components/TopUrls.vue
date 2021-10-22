@@ -8,15 +8,17 @@
             </div>
             <div v-for="(url, index) in urlList" class="mb-2">
                 <div class="flex flex-row justify-between">
-                    <div class="text-base">
-                        {{ index + 1 + ". " }}
-                        <a :href="baseUrl + '/' + url.shortcode">
-                            {{ baseUrl + "/" + url.shortcode }}</a
-                        >
+                    <div class="text-gray-600 text-base font-bold">
+                        {{ index + 1 + ". " }}{{ url.title }}
                     </div>
                     <div class="text-xs text-gray-400">
                         views: {{ url.view_count.toLocaleString() }}
                     </div>
+                </div>
+                <div class="text-base">
+                    <a :href="baseUrl + '/' + url.shortcode">
+                        {{ baseUrl + "/" + url.shortcode }}</a
+                    >
                 </div>
 
                 <div class="text-sm text-gray-400">{{ url.original }}</div>
@@ -36,6 +38,9 @@ export default {
     },
 
     computed: {
+        //Generates a base url from the current page/host
+        //Consider replacing this with a reference to an environment value, e.g. process.env.APP_URL
+
         baseUrl() {
             return location.protocol + "//" + location.host;
         }
