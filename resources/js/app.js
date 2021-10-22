@@ -22,6 +22,7 @@ window.Vue = require('vue').default;
 Vue.component('url-loader', require('./components/UrlLoader.vue').default);
 Vue.component('top-urls', require('./components/TopUrls.vue').default);
 Vue.component('submit-form', require('./components/SubmitForm.vue').default);
+Vue.component('modal', require('./components/Modal.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

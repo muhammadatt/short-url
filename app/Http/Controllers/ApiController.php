@@ -65,7 +65,7 @@ class ApiController extends Controller
             $url->view_count++;
             $url->save();
 
-            return response()->json(["url" => $url->original], 200);
+            return response()->json($url, 200);
         } else {
             return response()->json(['error' => ["message" => 'Error: Unable to find the requested URL.']], 404);
         }

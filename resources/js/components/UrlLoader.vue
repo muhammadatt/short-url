@@ -1,12 +1,9 @@
 <template>
-    <div class="container">
+    <div>
+        <modal v-if="modalOpen" @redirect="redirect"></modal>
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-body">
-                        {{ status }}
-                    </div>
-                </div>
+            <div class="text-lg">
+                {{ status }}
             </div>
         </div>
     </div>
@@ -24,24 +21,25 @@ export default {
     data() {
         return {
             url: null,
-            status: 'Loading please wait...',
-            loading: true
+            status: "Loading please wait...",
+            loading: true,
+            modalOpen: false
         };
     },
 
     computed: {},
 
     mounted() {
-
         axios
             .get("/api/" + this.shortcode)
             .then(response => {
                 this.url = response.data;
 
-                //TO DO: if (this.url.nsfw) show modal
-                //else: 
-                
-                window.location.replace(this.url.url);
+                if (this.url.nsfw) {
+                    this.modalOpen = true;
+                } else {
+                    this.redirect();
+                }
 
                 //console.log(response);
             })
@@ -50,6 +48,13 @@ export default {
                 this.status = err.response.data.error.message;
                 this.loading = false;
             });
+    },
+
+    methods: {
+        redirect() {
+            //Using location.replace removes the loader page the user's browser history
+            window.location.replace(this.url.original);
+        }
     }
 };
 </script>

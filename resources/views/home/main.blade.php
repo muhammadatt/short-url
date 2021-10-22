@@ -36,12 +36,7 @@
                 <submit-form class="mt-8"></submit-form>
 
             </div>
-
-            
         </div>
-
-
-
     </div>
 
     <script async src="{{mix('js/app.js')}}"></script>
