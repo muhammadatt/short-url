@@ -27,6 +27,7 @@ DB_PASSWORD=mydbpassword
 ## API Endpoints
 
 GET /api/{shortcode}
+
 Looks up a provided shortcode and returns a url object that contains the orignal url
 
 https://chiquito-url.herokuapp.com/api/3f
@@ -44,6 +45,7 @@ https://chiquito-url.herokuapp.com/api/3f
 ```
 
 POST /api/shorten
+
 Accepts an object that contains the original long url and returns a url object that contains the shortcode
 
 https://chiquito-url.herokuapp.com/api/shorten
@@ -70,6 +72,7 @@ Returns:
 ```
 
 GET /api/top
+
 Returns a list that contains the 100 most frequently viewed urls
 
 https://chiquito-url.herokuapp.com/api/top
@@ -123,7 +126,7 @@ It turns out that there are a lot of different ways to potentially handling the 
 
 I eliminated the idea of trying to hash the actual url itself and settled on the idea of hashing the value of the integer primary key for each new database entry.
 
-What I ended up finally doing was to take auto-incremented primary key converting it to a string value by converting it to Base62. I added a lengthy comment to the GeneratesShortcode Trait that discusses the considerations that I took into account and PROs/CONs of this approach. 
+What I ended up finally doing was to take the auto-incremented primary key and converting it to a string value by converting it to Base62. I added a lengthy comment to the GeneratesShortcode Trait that discusses the considerations that I took into account and PROs/CONs of this approach. 
 
 #### Potential Upgrades/Changes
 
