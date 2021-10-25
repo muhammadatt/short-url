@@ -2234,7 +2234,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       short_url: null,
       //will contain the shortened url returned from the server
-      error: false //form submit error status
+      error: false,
+      //form submit error status,
+      error_msg: '' //submit error message
 
     };
   },
@@ -2249,6 +2251,8 @@ __webpack_require__.r(__webpack_exports__);
     //copies the short url link to clipboard
     copyLink: function copyLink() {
       var input = this.$refs.short_url;
+      /* unhide and select text field */
+
       input.setAttribute("type", "text");
       input.select();
 
@@ -2258,7 +2262,7 @@ __webpack_require__.r(__webpack_exports__);
       } catch (err) {
         alert("Oops, unable to copy link");
       }
-      /* unselect the range */
+      /* unselect and re-hide field */
 
 
       input.setAttribute("type", "hidden");
@@ -2279,7 +2283,7 @@ __webpack_require__.r(__webpack_exports__);
          * if validation fails. Ideally, we would also validate that the url is valid on the
          * frontend before sending it to the server. 
          * */
-        _this.status = err.response.data.message;
+        _this.error_msg = err.response.data.error.message;
         _this.error = true;
       });
     }
@@ -38355,7 +38359,7 @@ var render = function() {
           ? _c(
               "div",
               { staticClass: "text-white bg-red-400 rounded px-2 mb-4" },
-              [_vm._v("\n        Unable to shorten. Not a valid url.\n    ")]
+              [_vm._v("\n        " + _vm._s(_vm.error_msg) + "\n    ")]
             )
           : _vm._e(),
         _vm._v(" "),
@@ -38506,7 +38510,7 @@ var render = function() {
         ),
         _vm._v(" "),
         _vm._l(_vm.urlList, function(url, index) {
-          return _c("div", { staticClass: "mb-2" }, [
+          return _c("div", { key: index, staticClass: "mb-2" }, [
             _c("div", { staticClass: "flex flex-row justify-between" }, [
               _c("div", { staticClass: "text-gray-600 text-base font-bold" }, [
                 _vm._v(

@@ -6,7 +6,7 @@
             >
                 Top 100 Most Visited Urls
             </div>
-            <div v-for="(url, index) in urlList" class="mb-2">
+            <div v-for="(url, index) in urlList" :key="index" class="mb-2">
                 <div class="flex flex-row justify-between">
                     <div class="text-gray-600 text-base font-bold">
                         {{ index + 1 + ". " }}{{ url.title }}

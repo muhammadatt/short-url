@@ -30,7 +30,7 @@
 
     <div v-else>
         <div v-if="error" class="text-white bg-red-400 rounded px-2 mb-4">
-            Unable to shorten. Not a valid url.
+            {{ error_msg }}
         </div>
         <form action="">
             <div class="flex flex-row mb-2">
@@ -76,7 +76,8 @@ export default {
                 nsfw: false //nsfw flag
             },
             short_url: null, //will contain the shortened url returned from the server
-            error: false //form submit error status
+            error: false, //form submit error status,
+            error_msg: '' //submit error message
         };
     },
 
@@ -93,6 +94,8 @@ export default {
         //copies the short url link to clipboard
         copyLink() {
             let input = this.$refs.short_url;
+
+            /* unhide and select text field */
             input.setAttribute("type", "text");
             input.select();
 
@@ -103,7 +106,7 @@ export default {
                 alert("Oops, unable to copy link");
             }
 
-            /* unselect the range */
+            /* unselect and re-hide field */
             input.setAttribute("type", "hidden");
             window.getSelection().removeAllRanges();
         },
@@ -127,7 +130,7 @@ export default {
                      * frontend before sending it to the server. 
                      * */
 
-                    this.status = err.response.data.message;
+                    this.error_msg = err.response.data.error.message;
                     this.error = true;
                 });
         }

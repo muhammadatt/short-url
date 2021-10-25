@@ -31,7 +31,7 @@ class ApiController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['error' => ["message" => 'Not a valid url.']], 422);
+            return response()->json(['error' => ["message" => 'Unable to shorten. Not a valid url.']], 422);
         }
 
         //extract the page title from the url
@@ -99,7 +99,7 @@ class ApiController extends Controller
 
     public function getTitle($url) {
         $title = '';
-        $data = file_get_contents($url);
+        $data = @file_get_contents($url);
 
         //extract title tag
         if ($data) {
